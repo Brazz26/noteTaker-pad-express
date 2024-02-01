@@ -2,6 +2,7 @@ const router = require('express').Router();
 const fs = require('fs');
 const {v4:uuidv4} = require('uuid');
 
+//retrieves saved notes from local storage and if there are none then returns the error
 router.get('/notes', (req, res)=> {
     console.log('here')
     fs.readFile('./db/db.json', ( err, notes ) => {
@@ -13,7 +14,7 @@ router.get('/notes', (req, res)=> {
         }
     })
 });
-
+//handles the save to local storage
 router.post('/notes', (req, res) => {
     const notesData = JSON.parse(fs.readFileSync('./db/db.json', 'utf-8'))
     const newNote = {
@@ -25,7 +26,7 @@ router.post('/notes', (req, res) => {
     fs.writeFileSync('./db/db.json', JSON.stringify(notesData))
     res.json(notesData)
 })
-
+//handles the delete function
 router.delete('/notes/:id', (req, res) => {
     let notes = fs.readFileSync('./db/db.json', 'utf-8')
     let notesData = JSON.parse(notes)
